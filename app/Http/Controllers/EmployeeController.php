@@ -10,7 +10,7 @@ class EmployeeController extends Controller
 {
     public function index()
     {
-        // show reservations with pending payment and allow filtering
+        // show only reservations awaiting payment
         $query = Reservation::with(['user', 'schedule.train', 'schedule.route'])
             ->where('payment_status', 'pending');
 
@@ -28,7 +28,6 @@ class EmployeeController extends Controller
         }
 
         if ($date = request()->query('date')) {
-            // filter by reservation created date (Y-m-d)
             $query->whereDate('created_at', $date);
         }
 
@@ -50,6 +49,7 @@ class EmployeeController extends Controller
         $reservation->payment_status = 'paid';
         $reservation->ticket_status = 'unused';
         $reservation->qr_code = $ticketReference;
+        $reservation->issued_at = now();
         // If no seat assigned, leave as Unassigned — station staff can assign later
         $reservation->save();
 
@@ -60,6 +60,11 @@ class EmployeeController extends Controller
             'payment_status' => 'paid',
         ]);
 
-        return redirect()->route('reservations.archive')->with('status', "Ticket issued and payment recorded. Reference: {$ticketReference}");
+        return redirect()->route('station.reservations')
+            ->with('status', 'Ticket issued and payment recorded.')
+            ->with('ticket_reference', $ticketReference)
+            ->with('ticket_passenger', $reservation->full_name ?: $reservation->user?->name ?: 'Passenger')
+            ->with('ticket_trip', $reservation->schedule?->route?->origin . ' to ' . $reservation->schedule?->route?->destination)
+            ->with('ticket_train', $reservation->schedule?->train?->train_name ?? 'Train');
     }
 }
