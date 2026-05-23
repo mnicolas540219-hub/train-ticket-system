@@ -35,17 +35,25 @@ class AuthenticatedSessionController extends Controller
                 Auth::guard('web')->logout();
                 $request->session()->invalidate();
                 $request->session()->regenerateToken();
-                return redirect()->route('admin.login')->withErrors(['email' => 'This account is not authorized as an admin.']);
+                return redirect()->route('admin.login')->withErrors(['username' => 'This account is not authorized as an admin.']);
             }
         }
-
         // If employee login is requested, verify the user is an employee
-        if ($request->input('employee')) {
+        elseif ($request->input('employee')) {
             if ($request->user()->role !== 'employee') {
                 Auth::guard('web')->logout();
                 $request->session()->invalidate();
                 $request->session()->regenerateToken();
                 return redirect()->route('employee.login')->withErrors(['username' => 'This account is not authorized as an employee.']);
+            }
+        }
+        // Customer login - user must have 'user' role
+        else {
+            if ($request->user()->role !== 'user') {
+                Auth::guard('web')->logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+                return redirect()->route('login')->withErrors(['login' => 'This account is not authorized as a customer.']);
             }
         }
 
