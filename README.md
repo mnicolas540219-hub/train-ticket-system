@@ -57,3 +57,44 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+## Deployment
+
+This project includes a recommended configuration for deploying to Render and instructions to connect a Clever Cloud MySQL addon.
+
+### Deploy to Render
+
+- Commit and push your repository to GitHub.
+- In Render dashboard, create a new Web Service and connect your repository.
+- Render will use `render.yaml` and `Procfile` to build and run the app. The service runs the build commands and starts the app with:
+
+```
+sh -lc 'php artisan migrate --force && php artisan serve --host 0.0.0.0 --port $PORT'
+```
+
+- In Render service settings, add the following environment variables (set appropriate values): `APP_KEY`, `APP_ENV=production`, `APP_DEBUG=false`, and your database credentials (`DB_HOST`, `DB_PORT`, `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`).
+
+### Using Clever Cloud MySQL addon
+
+If you provision a Clever Cloud MySQL addon (for example via the console link you provided), the addon will provide connection details which you should map into your Render environment variables.
+
+- Example mapping (set these variables in Render using the values from the Clever Cloud addon):
+
+```
+DB_HOST=<CleverCloud MySQL host>
+DB_PORT=<CleverCloud MySQL port>
+DB_DATABASE=<CleverCloud database name>
+DB_USERNAME=<CleverCloud database user>
+DB_PASSWORD=<CleverCloud database password>
+```
+
+Notes:
+- Keep secrets such as `DB_PASSWORD` and `APP_KEY` only in the Render dashboard (or a secrets manager). Do not commit them to the repository.
+- For production, consider using a process manager or PHP-FPM + Nginx instead of `php artisan serve` for better performance.
+
+
+## Deployment
+
+The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### Deploy to Render
+
