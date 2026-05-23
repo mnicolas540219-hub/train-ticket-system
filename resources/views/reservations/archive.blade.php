@@ -5,7 +5,6 @@
                 <p class="text-sm font-medium text-slate-500">Booking operations</p>
                 <h2 class="text-2xl font-semibold text-slate-950">Archived Reservations</h2>
             </div>
-            <a href="{{ route('station.reservations') }}" class="inline-flex items-center justify-center rounded-md bg-slate-950 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800">Back to Station</a>
         </div>
     </x-slot>
 
