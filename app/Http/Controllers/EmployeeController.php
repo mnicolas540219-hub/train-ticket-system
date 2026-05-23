@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Reservation;
 use App\Models\Payment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Schema;
 
 class EmployeeController extends Controller
 {
@@ -49,7 +50,11 @@ class EmployeeController extends Controller
         $reservation->payment_status = 'paid';
         $reservation->ticket_status = 'unused';
         $reservation->qr_code = $ticketReference;
-        $reservation->issued_at = now();
+
+        if (Schema::hasColumn('reservations', 'issued_at')) {
+            $reservation->issued_at = now();
+        }
+
         // If no seat assigned, leave as Unassigned — station staff can assign later
         $reservation->save();
 
