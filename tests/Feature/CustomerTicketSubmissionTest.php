@@ -7,7 +7,7 @@ use App\Models\Route as TrainRoute;
 use App\Models\Schedule;
 
 it('accepts a valid unused ticket and replies safe travels', function () {
-    $user = User::factory()->create(['role' => 'user', 'email_verified_at' => now()]);
+    $user = User::factory()->create(['role' => 'user']);
 
     $route = TrainRoute::create(['origin' => 'Origin', 'destination' => 'Destination']);
     $train = Train::create(['train_name' => 'T1', 'capacity' => 100]);
@@ -41,7 +41,7 @@ it('accepts a valid unused ticket and replies safe travels', function () {
 });
 
 it('rejects a ticket that has already been used', function () {
-    $user = User::factory()->create(['role' => 'user', 'email_verified_at' => now()]);
+    $user = User::factory()->create(['role' => 'user']);
 
     $route = TrainRoute::create(['origin' => 'Origin', 'destination' => 'Destination']);
     $train = Train::create(['train_name' => 'T1', 'capacity' => 100]);

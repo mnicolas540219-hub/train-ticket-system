@@ -87,10 +87,10 @@ Route::get('/dashboard', function () {
     ];
 
     return view('customer-dashboard', compact('availableSchedules', 'myReservations', 'dashboardStats'));
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth'])->name('dashboard');
 
 Route::post('/dashboard/ticket-submit', [ReservationController::class, 'submitTicket'])
-    ->middleware(['auth', 'verified'])
+    ->middleware(['auth'])
     ->name('dashboard.ticket.submit');
 
 Route::middleware('auth')->group(function () {
